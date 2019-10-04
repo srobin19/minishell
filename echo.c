@@ -6,18 +6,18 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 20:24:33 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/04 20:35:18 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/05 01:44:15 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		ft_echo(char **args)
+int			ft_echo(char **args)
 {
 	size_t	i;
 
 	if (!args)
-		return ;
+		return (0);
 	i = 1;
 	while (args[i])
 	{
@@ -27,5 +27,6 @@ void		ft_echo(char **args)
 		else
 			ft_putchar('\n');
 		i++;
-	}	
+	}
+	return (1);
 }

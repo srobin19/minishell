@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/01 19:20:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/05 01:45:34 by srobin           ###   ########.fr       */
+/*   Created: 2019/10/04 22:26:25 by srobin            #+#    #+#             */
+/*   Updated: 2019/10/05 01:41:46 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				main(void)
+int			ft_env(char **environ)
 {
-	extern char	**environ;
-	char		*input;
-	char		**args;
-
-	while (19)
-	{
-		ft_putstr("$> ");
-		get_next_line(0, &input);
-		args = ft_split_whitespaces(input);
-		if (!execute_builtin(environ, args))
-			is_binary_exe(environ, args, args[0]);
-	}
-	return (0);
+	if (!environ)
+		return (0);
+	ft_print_tab(environ);
+	return (1);
 }

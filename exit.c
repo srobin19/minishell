@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/01 19:20:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/05 01:45:34 by srobin           ###   ########.fr       */
+/*   Created: 2019/10/05 01:22:44 by srobin            #+#    #+#             */
+/*   Updated: 2019/10/05 01:33:56 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				main(void)
+int				ft_exit(char *arg)
 {
-	extern char	**environ;
-	char		*input;
-	char		**args;
+	char		*ex;
 
-	while (19)
-	{
-		ft_putstr("$> ");
-		get_next_line(0, &input);
-		args = ft_split_whitespaces(input);
-		if (!execute_builtin(environ, args))
-			is_binary_exe(environ, args, args[0]);
-	}
-	return (0);
+	if (!arg)
+		return (0);
+	ex = "exit";
+	if (ft_strcmp(arg, ex))
+		return (0);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 18:14:07 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/04 20:03:43 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/05 01:36:19 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,11 @@ int				is_binary_exe(char **environ, char **args, char *exe)
 	else if (check_path_access(path) == 0)
 	{
 		ft_putstr(exe);
-		ft_putstr(": Command not found in PATH.\n");
+		ft_putstr(": Command not found.\n");
 		return (0);
 	}
 	else if (check_path_access(path))
-		execute(path, args, exe);
+		execute_bin(path, args);
 	free(path);
 	ft_tabfree(args);
 	return (1);
