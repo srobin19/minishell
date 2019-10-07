@@ -6,11 +6,17 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 21:35:15 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 22:24:26 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 23:13:12 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void			cd_msg(char *path)
+{
+	ft_putstr("cd: ");
+	ft_putstr(path);
+}
 
 int				check_cd(char **args)
 {

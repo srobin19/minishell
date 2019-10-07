@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:32:37 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 18:15:01 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 22:43:04 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static char		**del_env(char ***environ, char **args, int size)
 	char		**roam;
 	size_t		i;
 
-	if (!(result = (char**)malloc(sizeof(char*) * (ft_tablen(*environ) + 1 - size))))
+	if (!(result = (char**)malloc(sizeof(char*) *
+	(ft_tablen(*environ) + 1 - size))))
 		exit(EXIT_FAILURE);
 	roam = *environ;
 	result_ptr = result;
@@ -55,7 +56,7 @@ static int		ft_args_match(char **environ, char **args)
 {
 	char		**roam;
 	char		**args_ptr;
-	int			result;;
+	int			result;
 
 	roam = environ;
 	result = 0;

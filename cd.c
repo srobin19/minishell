@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 21:07:30 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 22:25:45 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 23:26:48 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,26 +84,29 @@ static int		reset_cd(char ***environ, char *oldpath)
 	return (0);
 }
 
-static int		access_right(char *path, char **args)
+static int		access_right(char *path)
 {
 	struct stat	buf;
 
-	if (!path)
-		return (0);
 	if (!stat(path, &buf))
 	{
 		if (access(path, R_OK))
 		{
-			ft_putstr("cd: ");
-			ft_putstr(path);
+			cd_msg(path);
 			ft_putendl(": Permissions denied.");
+			return (-1);
+		}
+		if (!S_ISDIR(buf.st_mode))
+		{
+			cd_msg(path);
+			ft_putendl(": Not a directory.");
 			return (-1);
 		}
 	}
 	if (chdir(path))
 	{
-		ft_putstr("cd: No such file or directory: ");
-		ft_putendl(path);
+		cd_msg(path);
+		ft_putendl(": No such file or directory.");
 		return (-1);
 	}
 	return (1);
@@ -123,7 +126,7 @@ int				ft_cd(char **environ, char **args)
 	oldpath = getcwd(buf, 4096);
 	if (ft_tablen(args) == 1 || !(ft_strcmp(args[1], "--")))
 		return (reset_cd(&environ, oldpath));
-	if (!access_right(args[1], args))
+	if (!access_right(args[1]))
 		return (-1);
 	set_oldpwd_env(&environ, oldpath, 0);
 	set_pwd_env(&environ);
