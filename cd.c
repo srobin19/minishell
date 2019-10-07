@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 21:07:30 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 17:41:56 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 18:33:46 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,32 @@ static int		set_pwd_env(char ***environ, char *path)
 	return (1);
 }
 
-static int		reset_cd(char **environ, char *path)
+static int		reset_cd(char **environ)
 {
-	if (!path || !environ)
+	char		**roam;
+	char		*home;
+
+	if (!environ)
 		return (0);
-	if (chdir(path))
+	roam = environ;
+	while (*roam)
 	{
-		ft_putendl("HOME is not defined in minishell.h.");
-		return (-1);
+		if (ft_strnstr(*roam, "HOME=", 5))
+		{
+			if (!(home = ft_strsub(*roam, 5, ft_strlen(*roam))))
+				exit(EXIT_FAILURE);
+			if (chdir(home))
+			{
+				ft_putendl("cd: HOME not set..");
+				return (-1);
+			}
+			set_pwd_env(&environ, home);
+			ft_strdel(&home);
+			return (1);
+		}
+		roam++;
 	}
-	set_pwd_env(&environ, path);
-	return (1);
+	return (0);
 }
 
 static int		access_right(char *path)
@@ -59,6 +74,7 @@ static int		access_right(char *path)
 	else
 		return (1);
 }
+
 int				ft_cd(char **environ, char **args)
 {
 	if (!args || !environ)
@@ -75,7 +91,7 @@ int				ft_cd(char **environ, char **args)
 		return (-1);
 	}
 	if (ft_tablen(args) == 1)
-		return (reset_cd(environ, HOME));
+		return (reset_cd(environ));
 	if (!access_right(args[1]))
 		return (-1);
 	else if (chdir(args[1]))

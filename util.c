@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 19:04:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 17:34:25 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 18:18:26 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char			**env_cpy(char **environ)
 
 	if (!*environ)
 	{
-		ft_putendl("minishell: env is NULL, please try again");
+		ft_putendl("minishell: env is NULL, please try again.");
 		exit(EXIT_FAILURE);
 	}
 	if (!(result = (char**)malloc(sizeof(char *) * (ft_tablen(environ) + 1))))

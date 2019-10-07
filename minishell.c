@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 19:20:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 17:52:48 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 18:30:45 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int				main(void)
 		else if (!execute_builtin(&environ_cpy, args))
 			is_binary_exe(environ_cpy, args, args[0]);
 		free(input);
-		ft_tabfree(&args);
 	}
 	return (0);
 }
