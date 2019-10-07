@@ -6,7 +6,7 @@
 #    By: srobin <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/01 19:20:15 by srobin            #+#    #+#              #
-#    Updated: 2019/10/07 17:53:07 by srobin           ###   ########.fr        #
+#    Updated: 2019/10/07 21:35:37 by srobin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra
 NAME = minishell
 INCLUDES = minishell.h
-SRCS = minishell.c path.c util.c echo.c cd.c env.c pwd.c exit.c setenv.c unsetenv.c
-OBJS = minishell.o path.o util.o echo.o cd.o env.o pwd.o exit.o setenv.o unsetenv.o
+SRCS = minishell.c path.c util.c echo.c cd.c cd2.c env.c pwd.c exit.c setenv.c unsetenv.c parse.c
+OBJS = minishell.o path.o util.o echo.o cd.o cd2.o env.o pwd.o exit.o setenv.o unsetenv.o parse.o
 
 all: $(NAME)
 

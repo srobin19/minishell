@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 19:50:04 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 17:05:21 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 21:18:46 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,27 @@ static char			**add_env(char ***environ, char *arg, char *arg2)
 	return (result);
 }
 
-static int			setenv_two_args(char ***environ, char **args)
+static int		check_alpha(char **args)
 {
-	if (!ft_isalnum(args[1][0]))
+	if (!args)
+		return (0);
+	if (!(ft_isalnum(args[1][0])))
 	{
 		ft_putendl("setenv: Variable name must begin with a letter.");
 		return (0);
 	}
-	else if (!ft_stralpha(args[1]))
+	if (!(ft_stralpha(args[1])))
 	{
-		ft_putendl("setenv: Variable name must contain alphanumeric characters.");
+		ft_putendl("setenv: Variable name must contain alphamumeric characters.");
 		return (0);
 	}
+	return (1);
+}
+
+static int			setenv_two_args(char ***environ, char **args)
+{
+	if (!check_alpha(args))
+		return (0);
 	else
 	{
 		*environ = add_env(environ, args[1], NULL);
@@ -68,7 +77,6 @@ static int			setenv_two_args(char ***environ, char **args)
 	}
 	return (0);
 }
-
 int					ft_setenv(char ***environ, char **args)
 {
 	if (!environ || !args)
@@ -84,6 +92,8 @@ int					ft_setenv(char ***environ, char **args)
 		ft_putendl("setenv: Too many arguments");
 	else if (ft_tablen(args) == 3)
 	{
+		if (!check_alpha(args))
+			return (1);
 		*environ = add_env(environ, args[1], args[2]);
 		return (1);
 	}

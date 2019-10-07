@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 19:20:34 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 17:34:34 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 22:24:38 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <stdio.h>
-
-# define HOME "/Users/srobin"
 
 /*
 ** 			util.c
@@ -35,13 +33,24 @@ char		*find_path_exe(char **path_dir, char *exe);
 int			check_path_access(char *path);
 int			is_binary_exe(char **environ, char **args, char *exe);
 /*
+**			parse.c
+*/
+char		**get_input(char **input);
+/*
 **			echo.c
 */
 int			ft_echo(char **args);
 /*
 ** 			cd.c
 */
+int			set_oldpwd_env(char ***environ, char *oldpath, int opt);
+int			set_pwd_env(char ***environ);
 int			ft_cd(char **environ, char **args);
+/*
+**			cd2.c
+*/
+int			check_cd(char **args);
+int 		cd_back(char ***environ, char **args, char *oldpath);
 /*
 **			env.c
 */

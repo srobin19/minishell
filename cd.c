@@ -6,21 +6,44 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 21:07:30 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 18:33:46 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 22:25:45 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int		set_pwd_env(char ***environ, char *path)
+int				set_oldpwd_env(char ***environ, char *oldpath, int opt)
+{
+	char		**roam;
+	char		*newpath;
+	char		buf[4096];
+
+	if (!*environ)
+		return (0);
+	roam = *environ;
+	while (*roam)
+	{
+		if (ft_strnstr(*roam, "OLDPWD=", 7))
+		{
+			newpath = getcwd(buf, 4096);
+			if (ft_strcmp(oldpath, newpath) || opt)
+				swap_env(&(*roam), "OLDPWD", oldpath);
+			return (1);
+		}
+		roam++;
+	}
+	return (0);
+}
+
+int				set_pwd_env(char ***environ)
 {
 	char		**roam;
 	char		buf[4096];
 
-	if (!environ || !path)
+	if (!*environ)
 		return (0);
 	roam = *environ;
-	while (roam)
+	while (*roam)
 	{
 		if (*roam && ft_strnstr(*roam, "PWD=", 4))
 		{
@@ -29,17 +52,17 @@ static int		set_pwd_env(char ***environ, char *path)
 		}
 		roam++;
 	}
-	return (1);
+	return (0);
 }
 
-static int		reset_cd(char **environ)
+static int		reset_cd(char ***environ, char *oldpath)
 {
 	char		**roam;
 	char		*home;
 
-	if (!environ)
+	if (!*environ)
 		return (0);
-	roam = environ;
+	roam = *environ;
 	while (*roam)
 	{
 		if (ft_strnstr(*roam, "HOME=", 5))
@@ -51,7 +74,8 @@ static int		reset_cd(char **environ)
 				ft_putendl("cd: HOME not set..");
 				return (-1);
 			}
-			set_pwd_env(&environ, home);
+			set_oldpwd_env(environ, oldpath, 0);
+			set_pwd_env(environ);
 			ft_strdel(&home);
 			return (1);
 		}
@@ -60,46 +84,48 @@ static int		reset_cd(char **environ)
 	return (0);
 }
 
-static int		access_right(char *path)
+static int		access_right(char *path, char **args)
 {
+	struct stat	buf;
+
 	if (!path)
 		return (0);
-	if (access(path, R_OK))
+	if (!stat(path, &buf))
 	{
-		ft_putstr("cd: ");
-		ft_putstr(path);
-		ft_putendl(": Permissions denied.");
-		return (0);
+		if (access(path, R_OK))
+		{
+			ft_putstr("cd: ");
+			ft_putstr(path);
+			ft_putendl(": Permissions denied.");
+			return (-1);
+		}
 	}
-	else
-		return (1);
+	if (chdir(path))
+	{
+		ft_putstr("cd: No such file or directory: ");
+		ft_putendl(path);
+		return (-1);
+	}
+	return (1);
 }
 
 int				ft_cd(char **environ, char **args)
 {
+	char		buf[4096];
+	static char	*oldpath;
+
 	if (!args || !environ)
 		return (0);
-	if (ft_tablen(args) == 3)
-	{
-		ft_putstr("cd: String not in pwd: ");
-		ft_putendl(args[1]);
+	if (!check_cd(args))
 		return (-1);
-	}
-	else if (ft_tablen(args) > 3)
-	{
-		ft_putendl("cd: Too many arguments.");
+	if ((cd_back(&environ, args, oldpath)))
+		return (1);
+	oldpath = getcwd(buf, 4096);
+	if (ft_tablen(args) == 1 || !(ft_strcmp(args[1], "--")))
+		return (reset_cd(&environ, oldpath));
+	if (!access_right(args[1], args))
 		return (-1);
-	}
-	if (ft_tablen(args) == 1)
-		return (reset_cd(environ));
-	if (!access_right(args[1]))
-		return (-1);
-	else if (chdir(args[1]))
-	{
-		ft_putstr("cd: No such file or directory: ");
-		ft_putendl(args[1]);
-		return (-1);
-	}
-	set_pwd_env(&environ, args[1]);
+	set_oldpwd_env(&environ, oldpath, 0);
+	set_pwd_env(&environ);
 	return (1);
 }

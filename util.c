@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 19:04:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 18:18:26 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 21:06:56 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ int				execute_builtin(char ***environ, char **args)
 		return (ft_echo(args));
 	else if (!ft_strcmp(args[0], "setenv"))
 		return (ft_setenv(environ, args));
+	else if (!ft_strcmp(args[0], "unsetenv"))
+		return (ft_unsetenv(environ, args));
 	return (0);
 }

@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/01 19:20:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 21:32:26 by srobin           ###   ########.fr       */
+/*   Created: 2019/10/07 20:33:59 by srobin            #+#    #+#             */
+/*   Updated: 2019/10/07 21:02:23 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				main(void)
+char			**get_input(char **input)
 {
-	extern char	**environ;
-	char		**environ_cpy;
-	char		*input;
-	char		**args;
+	char		**result;
 
-	environ_cpy = env_cpy(environ);
-	while (19)
-	{
-		args = get_input(&input);
-		if (!(ft_exit(args[0])))
-			break ;
-		else if (!execute_builtin(&environ_cpy, args))
-			is_binary_exe(environ_cpy, args, args[0]);
-		free(input);
-	}
-	return (0);
+	ft_putstr("$> ");
+	get_next_line(0, input);
+	if (!(result = ft_split_whitespaces(*input)))
+		exit(EXIT_FAILURE);
+	return (result);
 }
