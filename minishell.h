@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 19:20:34 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/05 01:44:44 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/07 17:34:34 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@
 /*
 ** 			util.c
 */
+char		**env_cpy(char **environ);
 int			execute_bin(char *path, char **args);
-int			execute_builtin(char **environ, char **args);
+int			execute_builtin(char ***environ, char **args);
 /*
 ** 			path.c 
 */
@@ -45,6 +46,15 @@ int			ft_cd(char **environ, char **args);
 **			env.c
 */
 int			ft_env(char **environ);
+/*
+**			setenv.c
+*/
+int			ft_setenv(char ***environ, char **args);
+void		swap_env(char **environ, char *arg, char *arg2);
+/*
+**			unsetenv.c	
+*/
+int			ft_unsetenv(char ***environ, char **args);
 /*
 **			pwd.c
 */

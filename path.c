@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 18:14:07 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/05 01:36:19 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/05 23:53:18 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char				**get_path_dir(char **environ)
 	char		*path;
 	char		**result;
 
-	if (!environ)
+	if (!*environ)
 		return (NULL);
 	i = 0;	
 	while (environ[i])
@@ -27,13 +27,14 @@ char				**get_path_dir(char **environ)
 		{
 			if (!(path = ft_strsub(environ[i], 5, ft_strlen(environ[i]))))
 				exit(EXIT_FAILURE);
+			if (!(result = ft_strsplit(path, ':')))
+				exit (EXIT_FAILURE);
+			free(path);
+			return (result);
 		}
 		i++;
 	}
-	if (!(result = ft_strsplit(path, ':')))
-		exit(EXIT_FAILURE);
-	free(path);
-	return (result);
+	return (NULL);
 }
 
 char				*find_path_exe(char **path_dir, char *exe)
@@ -42,7 +43,7 @@ char				*find_path_exe(char **path_dir, char *exe)
 	char			*path;
 	size_t			i = 0;
 
-	if (!path_dir || !exe)
+	if (!*path_dir || !exe)
 		return (NULL);
 	if (exe[0] == '/')
 	{
@@ -81,10 +82,13 @@ int				is_binary_exe(char **environ, char **args, char *exe)
 {
 	char		**path_dir;
 	char		*path;
-
-	path_dir = get_path_dir(environ);
+	
+	if (!*environ || !*args || !exe)
+		return (0);
+	if (!(path_dir = get_path_dir(environ)))
+		return (-1);
 	path = find_path_exe(path_dir, exe);
-	ft_tabfree(path_dir);
+	ft_tabfree(&path_dir);
 	if (check_path_access(path) < 0)
 	{
 		ft_putstr(exe);
@@ -100,6 +104,6 @@ int				is_binary_exe(char **environ, char **args, char *exe)
 	else if (check_path_access(path))
 		execute_bin(path, args);
 	free(path);
-	ft_tabfree(args);
+	ft_tabfree(&args);
 	return (1);
 }

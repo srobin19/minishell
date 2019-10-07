@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 01:22:44 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/05 01:33:56 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/05 19:43:50 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,9 @@
 
 int				ft_exit(char *arg)
 {
-	char		*ex;
-
 	if (!arg)
 		return (0);
-	ex = "exit";
-	if (ft_strcmp(arg, ex))
+	if (!ft_strcmp(arg, "exit"))
 		return (0);
 	return (1);
 }
