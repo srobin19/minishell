@@ -6,11 +6,43 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 19:04:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 21:06:56 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/08 20:18:54 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void			sub_my_env(char **sub, char *line)
+{
+	char **split;
+
+	if (!(split = ft_strsplit(line, '=')))
+		exit(EXIT_FAILURE);
+	if (!(*sub = ft_strdup(split[0])))
+		exit(EXIT_FAILURE);
+	ft_tabfree(&split);
+}
+
+void			find_env(char **my_env, char **env_variable, char *name)
+{
+	int		i;
+	char	*sub;
+
+	i = -1;
+	sub = NULL;
+	while (my_env[++i])
+	{
+		sub_my_env(&sub, my_env[i]);
+		if (ft_strnequ(my_env[i], name, ft_strlen(sub)))
+		{
+			*env_variable = &my_env[i][(ft_strlen(name) + 1)];
+			ft_strdel(&sub);
+			return ;
+		}
+		ft_strdel(&sub);
+	}
+	return ;
+}
 
 char			**env_cpy(char **environ)
 {
@@ -41,7 +73,7 @@ char			**env_cpy(char **environ)
 	return (result);
 }
 
-int				execute_bin(char *path, char **args)
+int				execute_bin(char *path, char **args, char **env_cpy)
 {
 	pid_t		process;
 
@@ -50,7 +82,7 @@ int				execute_bin(char *path, char **args)
 	process = fork();
 	if (process == 0)
 	{
-		execve(path, args, NULL);
+		execve(path, args, env_cpy);
 		exit(EXIT_SUCCESS);
 	}
 	if (process > 0)

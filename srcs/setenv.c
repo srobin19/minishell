@@ -6,20 +6,16 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 19:50:04 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 22:44:45 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/08 21:15:28 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
 
-void				swap_env(char **environ, char *arg, char *arg2)
+void				init_and_free(char ***roam, char ***environ, char **sub)
 {
-	if (!environ || !arg)
-		return ;
-	free(*environ);
-	if (!(*environ = ft_strjoin3(arg, "=", arg2)))
-		exit(EXIT_FAILURE);
+	*sub = NULL;
+	*roam = *environ;
 }
 
 static char			**add_env(char ***environ, char *arg, char *arg2)
@@ -27,17 +23,19 @@ static char			**add_env(char ***environ, char *arg, char *arg2)
 	char			**roam;
 	char			**result;
 	char			*str;
+	char			*sub;
 
-	if (!environ || !arg)
-		return (0);
-	roam = *environ;
+	init_and_free(&roam, environ, &sub);
 	while (*roam)
 	{
-		if (ft_strnstr(*roam, arg, ft_strlen(arg)))
+		sub_my_env(&sub, *roam);
+		if (ft_strnequ(*roam, arg, ft_strlen(sub)))
 		{
+			ft_strdel(&sub);
 			swap_env(&(*roam), arg, arg2);
 			return (*environ);
 		}
+		ft_strdel(&sub);
 		roam++;
 	}
 	if (!(str = ft_strjoin3(arg, "=", arg2)))
@@ -83,7 +81,7 @@ int					ft_setenv(char ***environ, char **args)
 	if (!environ || !args)
 		return (0);
 	if (ft_tablen(args) < 2)
-		ft_env(*environ);
+		return (ft_env(*environ));
 	else if (ft_tablen(args) == 2)
 	{
 		setenv_two_args(environ, args);

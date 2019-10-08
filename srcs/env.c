@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/01 19:20:24 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 21:32:26 by srobin           ###   ########.fr       */
+/*   Created: 2019/10/04 22:26:25 by srobin            #+#    #+#             */
+/*   Updated: 2019/10/08 21:14:12 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				main(void)
+void		swap_env(char **environ, char *arg, char *arg2)
 {
-	extern char	**environ;
-	char		**environ_cpy;
-	char		*input;
-	char		**args;
+	if (!environ || !arg)
+		return ;
+	free(*environ);
+	if (!(*environ = ft_strjoin3(arg, "=", arg2)))
+		exit(EXIT_FAILURE);
+}
 
-	environ_cpy = env_cpy(environ);
-	while (19)
-	{
-		args = get_input(&input);
-		if (!(ft_exit(args[0])))
-			break ;
-		else if (!execute_builtin(&environ_cpy, args))
-			is_binary_exe(environ_cpy, args, args[0]);
-		free(input);
-	}
-	return (0);
+int			ft_env(char **environ)
+{
+	if (!environ)
+		return (0);
+	ft_print_tab(environ);
+	return (1);
 }

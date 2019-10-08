@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:32:37 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/07 22:43:04 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/08 21:15:37 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,18 @@
 
 static int		check_args(char *environ, char **args)
 {
+	char *sub;
+
+	sub = NULL;
 	while (*args)
 	{
-		if (ft_strnstr(environ, *args, ft_strlen(*args)))
+		sub_my_env(&sub, environ);
+		if (ft_strnequ(environ, *args, ft_strlen(sub)))
+		{
+			ft_strdel(&sub);
 			return (1);
+		}
+		ft_strdel(&sub);
 		args++;
 	}
 	return (0);
@@ -57,7 +65,9 @@ static int		ft_args_match(char **environ, char **args)
 	char		**roam;
 	char		**args_ptr;
 	int			result;
+	char		*sub;
 
+	sub = NULL;
 	roam = environ;
 	result = 0;
 	while (*roam)
@@ -65,8 +75,10 @@ static int		ft_args_match(char **environ, char **args)
 		args_ptr = args;
 		while (*args_ptr)
 		{
-			if (ft_strnstr(*roam, *args_ptr, ft_strlen(*args_ptr)))
+			sub_my_env(&sub, *roam);
+			if (ft_strnequ(*roam, *args_ptr, ft_strlen(sub)))
 				result++;
+			ft_strdel(&sub);
 			args_ptr++;
 		}
 		roam++;
@@ -85,5 +97,5 @@ int				ft_unsetenv(char ***environ, char **args)
 		*environ = del_env(environ, args, (ft_args_match(*environ, args)));
 		return (1);
 	}
-	return (0);
+	return (-1);
 }
