@@ -37,7 +37,7 @@ int			is_binary_exe(char **environ, char **args, char *exe);
 /*
 **			parse.c
 */
-char		**get_input(char **input, char **environ_cpy);
+char		**get_input(char **input, char ***environ_cpy);
 int			check_is_file(char **path, char **path_dir, char *exe);
 /*
 **			echo.c

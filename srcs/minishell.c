@@ -16,19 +16,9 @@ int				main(int argc, char **argv, char **environ)
 {
 	char		**environ_cpy;
 	char		*input;
-	char		**args;
 
 	environ_cpy = env_cpy(environ);
 	while (19)
-	{
-		if (!(args = get_input(&input, environ_cpy)))
-			continue ;
-		if (!(ft_exit(args[0])))
-			exit(EXIT_SUCCESS);
-		else if (!execute_builtin(&environ_cpy, args))
-			is_binary_exe(environ_cpy, args, args[0]);
-		ft_tabfree(&args);
-		ft_strdel(&input);
-	}
+		get_input(&input, &environ_cpy);
 	return (argc && argv && 0);
 }

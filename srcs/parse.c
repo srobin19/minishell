@@ -6,7 +6,7 @@
 /*   By: srobin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:33:59 by srobin            #+#    #+#             */
-/*   Updated: 2019/10/08 20:27:32 by srobin           ###   ########.fr       */
+/*   Updated: 2019/10/08 22:01:14 by srobin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,41 @@ static char		**split_args(char **args, char *input_str, size_t ac)
 	return (args);
 }
 
-char			**get_input(char **input, char **environ_cpy)
+static void		utils_get_input(char **input, char ***split_exe)
 {
-	char		**result;
-	int			words;
-
 	ft_putstr("\033[33m\033[01m$> \033[0m");
 	if (get_next_line(0, input) < 0)
 		exit(EXIT_FAILURE);
-	words = ft_nb_words(*input);
-	if (!(result = (char**)malloc(sizeof(char*) * (words + 1))))
+	if (!(*split_exe = ft_strsplit(*input, ';')))
 		exit(EXIT_FAILURE);
-	result = split_args(result, *input, words);
-	if (!result)
-		return (NULL);
-	check_expansions(&result, environ_cpy);
-	return (result);
+	ft_strdel(input);
+}
+
+char			**get_input(char **input, char ***environ_cpy)
+{
+	char		**result;
+	int			words;
+	int			i;
+	char		**split_exe;
+
+	i = -1;
+	split_exe = NULL;
+	utils_get_input(input, &split_exe);
+	while (split_exe[++i])
+	{
+		words = ft_nb_words(split_exe[i]);
+		if (!(result = (char**)malloc(sizeof(char*) * (words + 1))))
+			exit(EXIT_FAILURE);
+		result = split_args(result, split_exe[i], words);
+		if (!result)
+			return (NULL);
+		check_expansions(&result, *environ_cpy);
+		if (!(ft_exit(result[0])))
+			exit(EXIT_SUCCESS);
+		else if (!execute_builtin(environ_cpy, result))
+			is_binary_exe(*environ_cpy, result, result[0]);
+		ft_tabfree(&result);
+	}
+	ft_tabfree(&split_exe);
+	return (NULL);
 }

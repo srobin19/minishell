@@ -86,7 +86,9 @@ char				*find_path_exe(char **path_dir, char *exe)
 	{
 		if (lstat(exe, &filestat) == -1)
 			return (NULL);
-		return ((path = ft_strdup(exe)));
+		if (!(path = ft_strdup(exe)))
+			exit(EXIT_FAILURE);
+		return (path);
 	}
 	if (exe[0] == '/' || (exe[0] == '.' && exe[1] && exe[1] == '/'))
 	{
